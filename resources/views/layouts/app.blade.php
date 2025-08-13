@@ -14,21 +14,19 @@
 </head>
 <body class="font-sans antialiased bg-gray-100 dark:bg-gray-900">
 <div class="min-h-screen flex">
-	<!-- Header -->
 
-	<aside class="w-64 h-screen bg-gray-50 dark:bg-gray-800">
-		@include('layouts.sidebar')
-	</aside>
+	<div class="w-64 h-screen bg-gray-50 dark:bg-gray-800">
+	</div>
 
 	<div class="flex-1 flex flex-col">
+		@include('layouts.navigation')
 
-		<div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-16 flex items-center">
-			@include('layouts.navigation')
+		<div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-16 grid grid-cols-2">
+			@include('layouts.sidebar')
+			<div class="col-span-2">
+				{{ $slot }}
+			</div>
 		</div>
-
-		<main class="flex-1 overflow-auto">
-			{{ $slot }}
-		</main>
 	</div>
 </div>
 </body>

@@ -1,6 +1,6 @@
-<div class="max-w-7xl mx-auto w-full bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700" >
+<div class="mx-auto w-full bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700" >
 	<nav>
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="max-w-7xl mx-auto ">
 			<div class="flex justify-between h-16">
 				<div class="flex items-center">
 					<button @click="$dispatch('toggle-sidebar')"
