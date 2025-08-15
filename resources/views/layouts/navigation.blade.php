@@ -26,11 +26,10 @@
 					</div>
 				</div>
 
-				<!-- User menu -->
 				<div class="flex items-center">
 					<x-dropdown align="right" width="48">
 						<x-slot name="trigger">
-							<button class="flex items-center text-sm rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
+							<button class="flex items-center text-sm rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 mr-4">
 								<span class="mr-2">Hello, {{ Auth::user()->name }}</span>
 								<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
 									<path fill-rule="evenodd"

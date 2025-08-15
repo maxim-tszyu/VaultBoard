@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Finance;
+use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,10 +12,10 @@ return new class extends Migration {
 	 */
 	public function up(): void
 	{
-		Schema::create('categories', function (Blueprint $table) {
-			$table->id();
-			$table->string('title');
-			$table->timestamps();
+		Schema::create('category_task', function (Blueprint $table) {
+			$table->foreignIdFor(Category::class)->constrained('categories')->cascadeOnDelete();
+			$table->foreignIdFor(Task::class)->constrained('tasks')->cascadeOnDelete();
+			$table->primary(['category_id', 'task_id']);
 		});
 	}
 
@@ -24,6 +24,6 @@ return new class extends Migration {
 	 */
 	public function down(): void
 	{
-		Schema::dropIfExists('categories');
+		Schema::dropIfExists('category_task');
 	}
 };

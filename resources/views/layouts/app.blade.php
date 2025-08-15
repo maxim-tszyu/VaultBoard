@@ -21,10 +21,12 @@
 	<div class="flex-1 flex flex-col">
 		@include('layouts.navigation')
 
-		<div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-16 grid grid-cols-2">
+		<div class="grid grid-cols-2">
 			@include('layouts.sidebar')
 			<div class="col-span-2">
-				{{ $slot }}
+				<div class="p-6 space-y-6">
+					{{ $slot }}
+				</div>
 			</div>
 		</div>
 	</div>
