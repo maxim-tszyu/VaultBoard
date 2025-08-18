@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Advice;
 use App\Http\Requests\StoreAdviceRequest;
 use App\Http\Requests\UpdateAdviceRequest;
+use App\Models\Advice;
 
 class AdviceController extends Controller
 {

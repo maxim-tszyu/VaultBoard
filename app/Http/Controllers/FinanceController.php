@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Finance;
 use App\Http\Requests\StoreFinanceRequest;
 use App\Http\Requests\UpdateFinanceRequest;
+use App\Models\Finance;
 
 class FinanceController extends Controller
 {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Note;
 use App\Http\Requests\StoreNoteRequest;
 use App\Http\Requests\UpdateNoteRequest;
+use App\Models\Note;
 
 class NoteController extends Controller
 {

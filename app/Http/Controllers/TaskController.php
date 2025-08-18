@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Task;
+use App\Services\TaskService;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(private TaskService $taskService)
+    {
+    }
+
     public function index()
     {
-        return view('tasks.index');
+        $tasks = $this->taskService->index();
+        return view('tasks.index', compact('tasks'));
     }
 
     /**

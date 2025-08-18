@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Goal;
 use App\Http\Requests\StoreGoalRequest;
 use App\Http\Requests\UpdateGoalRequest;
+use App\Models\Goal;
 
 class GoalController extends Controller
 {

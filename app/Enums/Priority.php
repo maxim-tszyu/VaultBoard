@@ -8,7 +8,7 @@ enum Priority: string
 {
     use EnumTrait;
 
-	case HIGH = 'high';
-	case MEDIUM = 'medium';
-	case LOW = 'low';
+    case HIGH = 'high';
+    case MEDIUM = 'medium';
+    case LOW = 'low';
 }

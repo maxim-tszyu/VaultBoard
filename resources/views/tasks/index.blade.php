@@ -1,3 +1,3 @@
 <x-app-layout>
-	<h1>Hello</h1>
+	<h1>{{ $tasks }}</h1>
 </x-app-layout>

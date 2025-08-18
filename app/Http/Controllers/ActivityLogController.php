@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityLog;
 use App\Http\Requests\StoreActivityLogRequest;
 use App\Http\Requests\UpdateActivityLogRequest;
+use App\Models\ActivityLog;
 
 class ActivityLogController extends Controller
 {

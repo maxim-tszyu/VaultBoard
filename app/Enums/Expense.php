@@ -6,8 +6,8 @@ use App\Traits\EnumTrait;
 
 enum Expense: string
 {
-	use EnumTrait;
+    use EnumTrait;
 
-	case INCOME = 'income';
-	case OUTCOME = 'outcome';
+    case INCOME = 'income';
+    case OUTCOME = 'outcome';
 }

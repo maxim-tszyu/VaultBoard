@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entry;
 use App\Http\Requests\StoreEntryRequest;
 use App\Http\Requests\UpdateEntryRequest;
+use App\Models\Entry;
 
 class EntryController extends Controller
 {
