@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnalysisController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\NoteController;
@@ -23,6 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::prefix('/tasks')->name('tasks.')->group(function () {
         Route::get('/', [TaskController::class, 'index'])->name('index');
+        Route::get('/create', [TaskController::class, 'create'])->name('create');
+        Route::post('/store', [TaskController::class, 'store'])->name('store');
     });
     Route::prefix('/notes')->name('notes.')->group(function () {
         Route::get('/', [NoteController::class, 'index'])->name('index');
@@ -33,8 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/finances')->name('finances.')->group(function () {
         Route::get('/', [FinanceController::class, 'index'])->name('index');
     });
+    Route::prefix('/categories')->name('categories.')->group(function () {
+        Route::get('/create', [CategoryController::class, 'create'])->name('create');
+        Route::post('/store', [CategoryController::class, 'store'])->name('store');
+    });
     Route::get('/analysis', [AnalysisController::class])->name('analysis');
     Route::get('/report', [ReportController::class])->name('report');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

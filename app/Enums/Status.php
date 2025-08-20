@@ -7,8 +7,8 @@ use App\Traits\EnumTrait;
 enum Status: string
 {
     use EnumTrait;
-    case ACTIVE = 'active';
-    case INACTIVE = 'inactive';
-    case ABORTED = 'aborted';
-    case COMPLETED = 'completed';
+    case ACTIVE = 'Active';
+    case INACTIVE = 'Inactive';
+    case ABORTED = 'Aborted';
+    case COMPLETED = 'Completed';
 }

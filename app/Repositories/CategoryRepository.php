@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Task;
+use App\Models\Category;
 use Illuminate\Support\Collection;
 
-class TaskRepository
+class CategoryRepository
 {
     public static function findAllBelongingToUser(): Collection
     {
-        return Task::where('user_id', auth()->id())->get();
+        return Category::where('user_id', auth()->id())->get();
     }
 }

@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->hasOne(Report::class);
     }
 
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

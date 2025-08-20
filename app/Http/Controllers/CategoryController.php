@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\CategoryCreateDTO;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+
+use App\Services\CategoryService;
+
+use function Termwind\render;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(private CategoryService $categoryService)
+    {
+    }
+
     public function index()
     {
         //
@@ -21,7 +30,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
     /**
@@ -29,7 +38,9 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $dto = CategoryCreateDTO::fromRequest($request);
+        $this->categoryService->store($dto);
+        return redirect()->route('dashboard');
     }
 
     /**

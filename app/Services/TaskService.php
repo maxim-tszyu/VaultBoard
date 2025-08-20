@@ -12,7 +12,6 @@ class TaskService
 
     public function index()
     {
-        return $this->taskRepository->findAll();
+        return $this->taskRepository->findAllBelongingToUser();
     }
 }
-

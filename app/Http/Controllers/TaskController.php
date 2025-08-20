@@ -12,13 +12,12 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private TaskService $taskService)
-    {
-    }
+    public function __construct(private TaskService $taskService) {}
 
     public function index()
     {
         $tasks = $this->taskService->index();
+
         return view('tasks.index', compact('tasks'));
     }
 
@@ -27,7 +26,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('tasks.create');
     }
 
     /**
