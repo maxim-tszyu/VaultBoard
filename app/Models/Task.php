@@ -13,6 +13,12 @@ class Task extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'due_date' => 'datetime',
+        'started_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -26,6 +32,11 @@ class Task extends Model
     public function subtasks()
     {
         return $this->hasMany(Task::class, 'parent_task_id');
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
     }
 
     public function categories()

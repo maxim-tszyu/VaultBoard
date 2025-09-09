@@ -13,6 +13,11 @@ class ActivityLog extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime',
+    ];
+
     public function task()
     {
         return $this->belongsTo(Task::class);

@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\ActivityLogDTO;
 use App\Http\Requests\StoreActivityLogRequest;
 use App\Http\Requests\UpdateActivityLogRequest;
 use App\Models\ActivityLog;
+use App\Services\ActivityLogService;
 
 class ActivityLogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(private ActivityLogService $service) {}
+
     public function index()
     {
         //
@@ -29,7 +33,10 @@ class ActivityLogController extends Controller
      */
     public function store(StoreActivityLogRequest $request)
     {
-        //
+        $dto = ActivityLogDTO::fromRequest($request);
+        $this->service->store($dto);
+
+        return redirect()->back();
     }
 
     /**

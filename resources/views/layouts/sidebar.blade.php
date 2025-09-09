@@ -1,3 +1,4 @@
+@props(['sidebarLinks' => null])
 <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar"
 		type="button"
 		class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -12,18 +13,12 @@
 	   class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
 	   aria-label="Sidebar">
 	<div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-		<ul class="space-y-2 font-medium">
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-			<x-sidebar-link link="{{route('tasks.index')}}" title="Tasks" icon="https://cdn-icons-png.flaticon.com/512/839/839860.png" :incoming="true" amount="3"/>
-
+		<ul class="space-y-2 font-medium mt-11">
+			@if($sidebarLinks)
+				@foreach($sidebarLinks as $link)
+					<x-sidebar-link link="{{$link['url']}}" title="{{$link['title']}}" icon="{{$link['icon']}}" ></x-sidebar-link>
+				@endforeach
+			@endif
 		</ul>
 	</div>
 </div>

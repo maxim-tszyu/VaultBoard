@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\TaskCreateDTO;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Jobs\GenerateAiReport;
 use App\Models\Task;
 use App\Services\TaskService;
+use Illuminate\Support\Facades\Cache;
 
 class TaskController extends Controller
 {
@@ -34,7 +37,10 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        $dto = TaskCreateDTO::fromRequest($request);
+        $this->taskService->store($dto);
+
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -42,7 +48,23 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        $cacheKey = "ai_report_task_{$task->id}";
+        $report = Cache::get($cacheKey);
+
+        $params = ['task' => $task];
+
+        if ($report && $report !== 'pending') {
+            $params['ai_report'] = $report['text'];
+        } else {
+            $params['ai_report'] = null;
+        }
+
+        if (! $report) {
+            Cache::put($cacheKey, 'pending', 3600);
+            dispatch(new GenerateAiReport($task->id));
+        }
+
+        return view('tasks.show', $params);
     }
 
     /**

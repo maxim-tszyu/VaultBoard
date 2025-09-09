@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\NoteDTO;
 use App\Http\Requests\StoreNoteRequest;
 use App\Http\Requests\UpdateNoteRequest;
 use App\Models\Note;
+use App\Services\NoteService;
 
 class NoteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(private NoteService $service) {}
+
     public function index()
     {
         //
@@ -29,7 +33,10 @@ class NoteController extends Controller
      */
     public function store(StoreNoteRequest $request)
     {
-        //
+        $dto = NoteDTO::fromRequest($request);
+        $this->service->store($dto);
+
+        return redirect()->back();
     }
 
     /**

@@ -11,15 +11,15 @@
 					</button>
 
 
-					<div class="hidden sm:flex sm:space-x-6 ml-8">
+					<div class="hidden sm:flex sm:space-x-6">
 						@foreach ([
-							['route' => 'dashboard', 'label' => 'Dashboard'],
-							['route' => 'tasks.index', 'label' => 'Tasks'],
-							['route' => 'notes.index', 'label' => 'Notes'],
-							['route' => 'finances.index', 'label' => 'Finances'],
-							['route' => 'entries.index', 'label' => 'Entries'],
+							['route' => 'dashboard', 'label' => 'Dashboard', 'active_route' => 'dashboard'],
+							['route' => 'tasks.index', 'label' => 'Tasks', 'active_route' => 'tasks.*'],
+							['route' => 'notes.index', 'label' => 'Notes', 'active_route' => 'notes.*'],
+							['route' => 'finances.index', 'label' => 'Finances', 'active_route' => 'finances.*'],
+							['route' => 'entries.index', 'label' => 'Entries', 'active_route' => 'entries.*'],
 						] as $link)
-							<x-nav-link :href="route($link['route'])" :active="request()->routeIs($link['route'])">
+							<x-nav-link :href="route($link['route'])" :active="request()->routeIs($link['active_route'])">
 								{{ __($link['label']) }}
 							</x-nav-link>
 						@endforeach
@@ -40,7 +40,7 @@
 						</x-slot>
 						<x-slot name="content">
 							<x-dropdown-link :href="route('profile.edit')">{{ __('Profile') }}</x-dropdown-link>
-							<x-dropdown-link :href="route('analysis')">{{ __('Analysis') }}</x-dropdown-link>
+							<x-dropdown-link :href="route('analysis',1)">{{ __('Analysis') }}</x-dropdown-link>
 							<x-dropdown-link :href="route('report')">{{ __('Report') }}</x-dropdown-link>
 							<form method="POST" action="{{ route('logout') }}">
 								@csrf

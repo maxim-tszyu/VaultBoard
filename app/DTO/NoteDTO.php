@@ -2,16 +2,18 @@
 
 namespace App\DTO;
 
-class CategoryCreateDTO
+class NoteDTO
 {
     public function __construct(
-        public string $title,
+        public int $task_id,
+        public string $content,
     ) {}
 
     public static function fromRequest($request): self
     {
         return new self(
-            title: $request->title,
+            task_id: $request->task_id,
+            content: $request->content,
         );
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EntryController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskStatusController;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,10 +28,15 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/tasks')->name('tasks.')->group(function () {
         Route::get('/', [TaskController::class, 'index'])->name('index');
         Route::get('/create', [TaskController::class, 'create'])->name('create');
+        Route::get('/{task}', [TaskController::class, 'show'])->name('show');
         Route::post('/store', [TaskController::class, 'store'])->name('store');
+        Route::put('/edit', [TaskController::class, 'edit'])->name('edit');
+        Route::patch('/update_status/{task}', TaskStatusController::class)->name('update.status');
+        Route::delete('/destroy', [TaskController::class, 'destroy'])->name('destroy');
     });
     Route::prefix('/notes')->name('notes.')->group(function () {
         Route::get('/', [NoteController::class, 'index'])->name('index');
+        Route::post('/store', [NoteController::class, 'store'])->name('store');
     });
     Route::prefix('/entries')->name('entries.')->group(function () {
         Route::get('/', [EntryController::class, 'index'])->name('index');
@@ -40,8 +48,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [CategoryController::class, 'create'])->name('create');
         Route::post('/store', [CategoryController::class, 'store'])->name('store');
     });
-    Route::get('/analysis', [AnalysisController::class])->name('analysis');
+    Route::prefix('/logs')->name('logs.')->group(function () {
+        Route::post('/store', [ActivityLogController::class, 'store'])->name('store');
+    });
+    Route::get('/analysis/{task}', AnalysisController::class)->name('analysis');
     Route::get('/report', [ReportController::class])->name('report');
 });
 
-require __DIR__ . '/auth.php';
+Broadcast::routes();
+
+require __DIR__.'/auth.php';

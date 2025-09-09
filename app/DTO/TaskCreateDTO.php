@@ -22,7 +22,7 @@ class TaskCreateDTO
             parent_task_id: $request->parent_task_id,
             title: $request->title,
             description: $request->description,
-            due_date: Carbon::parse($request->due_date),
+            due_date: Carbon::parse($request->datetime),
             priority: Priority::from($request->priority),
             category_ids: $request->category_ids ?? []
         );

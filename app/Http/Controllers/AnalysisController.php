@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class AnalysisController extends Controller
@@ -9,8 +10,5 @@ class AnalysisController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
-    {
-        //
-    }
+    public function __invoke(Request $request, Task $task) {}
 }

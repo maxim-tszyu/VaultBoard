@@ -1,3 +1,4 @@
+@props(['sidebarLinks' => null])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -22,7 +23,7 @@
 		@include('layouts.navigation')
 
 		<div class="grid grid-cols-2">
-			@include('layouts.sidebar')
+			@include('layouts.sidebar', ['sidebarLinks' => $sidebarLinks])
 			<div class="col-span-2">
 				<div class="p-6 space-y-6">
 					{{ $slot }}

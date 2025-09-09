@@ -28,7 +28,7 @@ class StoreCategoryRequest extends FormRequest
                 'required',
                 'min:2',
                 'max:255',
-                Rule::unique('categories', 'title')->where('user_id', $this->user()->id)
+                Rule::unique('categories', 'title')->where('user_id', $this->user()->id),
             ],
         ];
     }

@@ -5,15 +5,13 @@ namespace App\Services;
 use App\DTO\CategoryCreateDTO;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
-use App\Repositories\TaskRepository;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryService
 {
     public function __construct(
         private CategoryRepository $categoryRepository
-    ) {
-    }
+    ) {}
 
     public function index()
     {
@@ -24,7 +22,7 @@ class CategoryService
     {
         Category::create([
             'user_id' => Auth::user()->id,
-            'title' => $categoryCreateDTO->title
+            'title' => $categoryCreateDTO->title,
         ]);
     }
 }

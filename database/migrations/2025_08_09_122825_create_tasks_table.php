@@ -24,6 +24,7 @@ return new class extends Migration
             $table->datetime('due_date');
             $table->datetime('started_at')->nullable();
             $table->datetime('completed_at')->nullable();
+            $table->datetime('aborted_at')->nullable();
             $table->enum('status', Status::values());
             $table->enum('priority', Priority::values());
             $table->timestamps();
