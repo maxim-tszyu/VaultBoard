@@ -11,7 +11,7 @@ class TaskObserver
      */
     public function created(Task $task): void
     {
-        //
+
     }
 
     /**

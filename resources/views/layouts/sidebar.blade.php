@@ -18,6 +18,7 @@
 				@foreach($sidebarLinks as $link)
 					<x-sidebar-link link="{{$link['url']}}" title="{{$link['title']}}" icon="{{$link['icon']}}" ></x-sidebar-link>
 				@endforeach
+
 			@endif
 		</ul>
 	</div>

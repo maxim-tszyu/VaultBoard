@@ -7,8 +7,23 @@ use Illuminate\Support\Collection;
 
 class TaskRepository
 {
-    public static function findAllBelongingToUser(): Collection
+    public static function findAllTasksBelongingToUser(): Collection
     {
         return Task::where('user_id', auth()->id())->get();
+    }
+
+    public static function findAllUrgentTasksBelongingToUser(): Collection
+    {
+        return Task::where('user_id', auth()->id())
+            ->whereNotNull('due_date')
+            ->whereDate('due_date', '<=', now()->addDays(3))
+            ->get();
+    }
+
+    public static function findAllPriorityTasksBelongingToUser(): Collection
+    {
+        return Task::where('user_id', auth()->id())
+            ->where('priority', 'High')
+            ->get();
     }
 }

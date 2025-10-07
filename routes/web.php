@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\NoteController;
@@ -17,22 +18,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::prefix('/tasks')->name('tasks.')->group(function () {
+        Route::delete('/destroy', [TaskController::class, 'destroy'])->name('destroy');
         Route::get('/', [TaskController::class, 'index'])->name('index');
         Route::get('/create', [TaskController::class, 'create'])->name('create');
         Route::get('/{task}', [TaskController::class, 'show'])->name('show');
-        Route::post('/store', [TaskController::class, 'store'])->name('store');
-        Route::put('/edit', [TaskController::class, 'edit'])->name('edit');
+        Route::get('/edit/{task}', [TaskController::class, 'edit'])->name('edit');
         Route::patch('/update_status/{task}', TaskStatusController::class)->name('update.status');
-        Route::delete('/destroy', [TaskController::class, 'destroy'])->name('destroy');
+        Route::post('/store', [TaskController::class, 'store'])->name('store');
+        Route::put('/update/{task}', [TaskController::class, 'update'])->name('update');
     });
     Route::prefix('/notes')->name('notes.')->group(function () {
         Route::get('/', [NoteController::class, 'index'])->name('index');
@@ -57,4 +56,4 @@ Route::middleware('auth')->group(function () {
 
 Broadcast::routes();
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

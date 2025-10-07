@@ -6,6 +6,7 @@ use App\DTO\TaskCreateDTO;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Jobs\GenerateAiReport;
+use App\Models\Category;
 use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Support\Facades\Cache;
@@ -15,13 +16,15 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private TaskService $taskService) {}
+    public function __construct(private TaskService $taskService)
+    {
+    }
 
     public function index()
     {
-        $tasks = $this->taskService->index();
+        $data = $this->taskService->index();
 
-        return view('tasks.index', compact('tasks'));
+        return view('tasks.index', $data);
     }
 
     /**
@@ -59,7 +62,7 @@ class TaskController extends Controller
             $params['ai_report'] = null;
         }
 
-        if (! $report) {
+        if (!$report) {
             Cache::put($cacheKey, 'pending', 3600);
             dispatch(new GenerateAiReport($task->id));
         }
@@ -72,7 +75,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        $categories = Category::all();
+        $allTasks = Task::where('user_id', '=', auth()->user()->id)->get();
+        return view('tasks.edit', compact('task', 'categories', 'allTasks'));
     }
 
     /**
@@ -80,7 +85,9 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $task->update($request->validated());
+        Cache::forget("ai_report_task_{$task->id}");
+        return redirect()->route('tasks.show', $task);
     }
 
     /**

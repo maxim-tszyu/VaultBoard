@@ -15,7 +15,11 @@ class TaskService
 
     public function index()
     {
-        return $this->taskRepository->findAllBelongingToUser();
+        $tasks = $this->taskRepository->findAllTasksBelongingToUser();
+        $priorityTasks = $this->taskRepository->findAllPriorityTasksBelongingToUser();
+        $urgentTasks = $this->taskRepository->findAllUrgentTasksBelongingToUser();
+
+        return compact('tasks', 'priorityTasks', 'urgentTasks');
     }
 
     public function store(TaskCreateDTO $taskCreateDTO)
