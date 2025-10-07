@@ -25,7 +25,7 @@ class StoreActivityLogRequest extends FormRequest
         return [
             'task_id' => 'required|exists:tasks,id',
             'title' => 'required|string|max:255',
-            'content' => 'required|string|max:255',
+            'content' => 'required|string|max:5000',
             'started_at' => 'required|date',
             'ended_at' => 'required|date|after:start_at',
         ];

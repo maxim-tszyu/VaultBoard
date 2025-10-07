@@ -35,7 +35,6 @@ class ActivityLogController extends Controller
     {
         $dto = ActivityLogDTO::fromRequest($request);
         $this->service->store($dto);
-
         return redirect()->back();
     }
 
