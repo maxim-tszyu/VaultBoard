@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Task;
+use Illuminate\Support\Facades\Cache;
 
 class TaskObserver
 {
@@ -11,7 +12,6 @@ class TaskObserver
      */
     public function created(Task $task): void
     {
-
     }
 
     /**
@@ -30,7 +30,10 @@ class TaskObserver
         }
     }
 
-    public function updated(Task $task): void {}
+    public function updated(Task $task): void
+    {
+        Cache::forget("ai_report_task_{$task->id}");
+    }
 
     /**
      * Handle the Task "deleted" event.

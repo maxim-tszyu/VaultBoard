@@ -86,7 +86,6 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Task $task)
     {
         $task->update($request->validated());
-        Cache::forget("ai_report_task_{$task->id}");
         return redirect()->route('tasks.show', $task);
     }
 

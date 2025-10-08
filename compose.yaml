@@ -10,7 +10,6 @@ services:
             - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -25,6 +24,68 @@ services:
             - pgsql
             - redis
             - mailpit
+    vite:
+        image: node:20
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        ports:
+            - "5173:5173"
+        command: bash -c "npm install && npm run dev"
+        networks:
+            - sail
+    laravel-queue-worker:
+        image: 'sail-8.4/app'
+        container_name: laravel-queue-worker
+        tty: true
+        environment:
+            SERVICE_NAME: laravel-queue-worker
+            SERVICE_TAGS: dev
+            WWWUSER: '${WWWUSER}'
+            WWWGROUP: '${WWWGROUP}'
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - sail
+        command: php artisan queue:work --queue=default --sleep=3 --tries=3 --max-time=3600
+        restart: always
+
+    laravel-schedule-worker:
+        image: 'sail-8.4/app'
+        container_name: laravel-schedule-worker
+        tty: true
+        environment:
+            SERVICE_NAME: laravel-schedule-worker
+            SERVICE_TAGS: dev
+            WWWUSER: '${WWWUSER}'
+            WWWGROUP: '${WWWGROUP}'
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - sail
+        command: php artisan schedule:work
+        restart: always
+
+    laravel-reverb-worker:
+        image: 'sail-8.4/app'
+        container_name: laravel-reverb-worker
+        tty: true
+        ports:
+            - '${REVERB_PORT:-8080}:8080'
+        environment:
+            SERVICE_NAME: laravel-reverb-worker
+            SERVICE_TAGS: dev
+            WWWUSER: '${WWWUSER}'
+            WWWGROUP: '${WWWGROUP}'
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - sail
+        command: php artisan reverb:start
+        restart: always
     pgsql:
         image: 'pgvector/pgvector:pg17'
         ports:
