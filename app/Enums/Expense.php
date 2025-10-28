@@ -9,5 +9,5 @@ enum Expense: string
     use EnumTrait;
 
     case INCOME = 'income';
-    case OUTCOME = 'outcome';
+    case EXPENSE = 'expense';
 }

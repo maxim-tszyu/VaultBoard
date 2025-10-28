@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\GoalController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -40,8 +41,13 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/entries')->name('entries.')->group(function () {
         Route::get('/', [EntryController::class, 'index'])->name('index');
     });
+    Route::prefix('/goals')->name('goals.')->group(function () {
+        Route::get('/', [GoalController::class, 'index'])->name('index');
+        Route::get('/create', [GoalController::class, 'create'])->name('create');
+    });
     Route::prefix('/finances')->name('finances.')->group(function () {
         Route::get('/', [FinanceController::class, 'index'])->name('index');
+        Route::post('/store', [FinanceController::class, 'store'])->name('store');
     });
     Route::prefix('/categories')->name('categories.')->group(function () {
         Route::get('/create', [CategoryController::class, 'create'])->name('create');

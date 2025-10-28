@@ -55,15 +55,28 @@ class TaskController extends Controller
         $report = Cache::get($cacheKey);
 
         $params = ['task' => $task];
+        $shouldRegenerate = false;
 
-        if ($report && $report !== 'pending') {
-            $params['ai_report'] = $report['text'];
+        if (is_string($report)) {
+            if ($report === 'pending') {
+                $params['ai_report'] = null;
+            } elseif ($report === 'failed') {
+                $lastFailedAt = Cache::get("ai_report_failed_at_{$task->id}");
+                if (!$lastFailedAt || now()->diffInMinutes($lastFailedAt) > 10) {
+                    $shouldRegenerate = true;
+                }
+                $params['ai_report'] = null;
+            } else {
+                $params['ai_report'] = $report;
+            }
         } else {
             $params['ai_report'] = null;
+            $shouldRegenerate = true;
         }
 
-        if (!$report) {
-            Cache::put($cacheKey, 'pending', 3600);
+        if ($shouldRegenerate) {
+            Cache::put($cacheKey, 'pending', now()->addHour());
+            Cache::put("ai_report_failed_at_{$task->id}", now(), now()->addHour());
             dispatch(new GenerateAiReport($task->id));
         }
 

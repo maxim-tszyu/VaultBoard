@@ -17,6 +17,7 @@
 		<div class="bg-white/10 text-white rounded-2xl shadow-md p-6">
 			<h1 class="text-3xl font-bold mb-4">{{ $task->title }}</h1>
 			<p class="text-gray-200 mb-4">{{ $task->description }}</p>
+			<p class="text-gray-200 mb-4">{{ $task->embedding ?? 'something' }}</p>
 
 			<div class="flex flex-wrap gap-4 text-sm text-gray-300">
 				<span class="px-3 py-1 rounded-full font-medium {{ $statusClasses[$task->status] ?? 'bg-white/10 text-gray-800' }}">
@@ -75,7 +76,7 @@
 							</button>
 						</form>
 				@endswitch
-
+				<a class="px-3 py-2 rounded-sm bg-yellow-600/70 text-white text-xs hover:bg-yellow-700/80" href="{{route('tasks.edit', $task->id)}}">Изменить</a>
 			</div>
 
 		</div>
@@ -219,7 +220,6 @@
 	<script>
 		const taskId = {{ $task->id }};
 		const aiReport = {!! json_encode($ai_report ?? false) !!};
-
 		const formatReport = (html) => {
 			let output = html;
 

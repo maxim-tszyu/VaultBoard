@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFinanceRequest;
 use App\Http\Requests\UpdateFinanceRequest;
 use App\Models\Finance;
+use App\Models\Goal;
 
 class FinanceController extends Controller
 {
@@ -13,7 +14,9 @@ class FinanceController extends Controller
      */
     public function index()
     {
-        return view('finances.index');
+        $finances = Finance::where('user_id', '=', auth()->user()->id)->get();
+        $goals = Goal::where('user_id', '=', auth()->user()->id)->get();
+        return view('finances.index', compact('finances','goals'));
     }
 
     /**
@@ -21,7 +24,7 @@ class FinanceController extends Controller
      */
     public function create()
     {
-        //
+        return view('finances.create');
     }
 
     /**
@@ -29,7 +32,8 @@ class FinanceController extends Controller
      */
     public function store(StoreFinanceRequest $request)
     {
-        //
+        dump('roblox');
+        dd($request);
     }
 
     /**
