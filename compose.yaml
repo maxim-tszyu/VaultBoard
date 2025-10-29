@@ -1,143 +1,157 @@
 services:
-    laravel.test:
-        build:
-            context: './vendor/laravel/sail/runtimes/8.4'
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: 'sail-8.4/app'
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-            IGNITION_LOCAL_SITES_PATH: '${PWD}'
-        volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
-        depends_on:
-            - pgsql
-            - redis
-            - mailpit
-    vite:
-        image: node:20
-        working_dir: /var/www/html
-        volumes:
-            - .:/var/www/html
-        ports:
-            - "5173:5173"
-        command: bash -c "npm install && npm run dev"
-        networks:
-            - sail
-    laravel-queue-worker:
-        image: 'sail-8.4/app'
-        container_name: laravel-queue-worker
-        tty: true
-        environment:
-            SERVICE_NAME: laravel-queue-worker
-            SERVICE_TAGS: dev
-            WWWUSER: '${WWWUSER}'
-            WWWGROUP: '${WWWGROUP}'
-        working_dir: /var/www/html
-        volumes:
-            - ./:/var/www/html
-        networks:
-            - sail
-        command: php artisan queue:work --queue=default --sleep=3 --tries=3 --max-time=3600
-        restart: always
+  laravel.test:
+    build:
+      context: './vendor/laravel/sail/runtimes/8.4'
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    image: 'sail-8.4/app'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '${APP_PORT:-80}:80'
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_SAIL: 1
+      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+      IGNITION_LOCAL_SITES_PATH: '${PWD}'
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - sail
+    depends_on:
+      - pgsql
+      - redis
+      - mailpit
+  vite:
+    image: node:20
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "5173:5173"
+    command: bash -c "npm install && npm run dev"
+    networks:
+      - sail
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434
+    volumes:
+      - ollama:/root/.ollama
+    container_name: ollama
+    networks:
+      - sail
+    depends_on:
+      - laravel.test
+    tty: true
+    restart: unless-stopped
+  laravel-queue-worker:
+    image: 'sail-8.4/app'
+    container_name: laravel-queue-worker
+    tty: true
+    environment:
+      SERVICE_NAME: laravel-queue-worker
+      SERVICE_TAGS: dev
+      WWWUSER: '${WWWUSER}'
+      WWWGROUP: '${WWWGROUP}'
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - sail
+    command: php artisan queue:work --queue=default --sleep=3 --tries=3 --max-time=3600
+    restart: always
 
-    laravel-schedule-worker:
-        image: 'sail-8.4/app'
-        container_name: laravel-schedule-worker
-        tty: true
-        environment:
-            SERVICE_NAME: laravel-schedule-worker
-            SERVICE_TAGS: dev
-            WWWUSER: '${WWWUSER}'
-            WWWGROUP: '${WWWGROUP}'
-        working_dir: /var/www/html
-        volumes:
-            - ./:/var/www/html
-        networks:
-            - sail
-        command: php artisan schedule:work
-        restart: always
+  laravel-schedule-worker:
+    image: 'sail-8.4/app'
+    container_name: laravel-schedule-worker
+    tty: true
+    environment:
+      SERVICE_NAME: laravel-schedule-worker
+      SERVICE_TAGS: dev
+      WWWUSER: '${WWWUSER}'
+      WWWGROUP: '${WWWGROUP}'
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - sail
+    command: php artisan schedule:work
+    restart: always
 
-    laravel-reverb-worker:
-        image: 'sail-8.4/app'
-        container_name: laravel-reverb-worker
-        tty: true
-        ports:
-            - '${REVERB_PORT:-8080}:8080'
-        environment:
-            SERVICE_NAME: laravel-reverb-worker
-            SERVICE_TAGS: dev
-            WWWUSER: '${WWWUSER}'
-            WWWGROUP: '${WWWGROUP}'
-        working_dir: /var/www/html
-        volumes:
-            - ./:/var/www/html
-        networks:
-            - sail
-        command: php artisan reverb:start
-        restart: always
-    pgsql:
-        image: 'pgvector/pgvector:pg17'
-        ports:
-            - '${FORWARD_DB_PORT:-5432}:5432'
-        environment:
-            PGPASSWORD: '${DB_PASSWORD:-secret}'
-            POSTGRES_DB: '${DB_DATABASE}'
-            POSTGRES_USER: '${DB_USERNAME}'
-            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
-        volumes:
-            - 'sail-pgsql:/var/lib/postgresql/data'
-            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
-        networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - pg_isready
-                - '-q'
-                - '-d'
-                - '${DB_DATABASE}'
-                - '-U'
-                - '${DB_USERNAME}'
-            retries: 3
-            timeout: 5s
-    redis:
-        image: 'redis:alpine'
-        ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
-        volumes:
-            - 'sail-redis:/data'
-        networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - redis-cli
-                - ping
-            retries: 3
-            timeout: 5s
-    mailpit:
-        image: 'axllent/mailpit:latest'
-        ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
-        networks:
-            - sail
+  laravel-reverb-worker:
+    image: 'sail-8.4/app'
+    container_name: laravel-reverb-worker
+    tty: true
+    ports:
+      - '${REVERB_PORT:-8080}:8080'
+    environment:
+      SERVICE_NAME: laravel-reverb-worker
+      SERVICE_TAGS: dev
+      WWWUSER: '${WWWUSER}'
+      WWWGROUP: '${WWWGROUP}'
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - sail
+    command: php artisan reverb:start
+    restart: always
+  pgsql:
+    image: 'pgvector/pgvector:pg17'
+    ports:
+      - '${FORWARD_DB_PORT:-5432}:5432'
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - 'sail-pgsql:/var/lib/postgresql/data'
+      - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+    networks:
+      - sail
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - '-q'
+        - '-d'
+        - '${DB_DATABASE}'
+        - '-U'
+        - '${DB_USERNAME}'
+      retries: 3
+      timeout: 5s
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - 'sail-redis:/data'
+    networks:
+      - sail
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      retries: 3
+      timeout: 5s
+  mailpit:
+    image: 'axllent/mailpit:latest'
+    ports:
+      - '${FORWARD_MAILPIT_PORT:-1025}:1025'
+      - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+    networks:
+      - sail
 networks:
-    sail:
-        driver: bridge
+  sail:
+    driver: bridge
 volumes:
-    sail-pgsql:
-        driver: local
-    sail-redis:
-        driver: local
+  sail-pgsql:
+    driver: local
+  sail-redis:
+    driver: local
+  ollama: { }

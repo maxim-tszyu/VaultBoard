@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Task::class, 'parent_task_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('title');
-            $table->vector('embedding', 64)->nullable();
+            $table->vector('embedding', 1024)->nullable();
             $table->text('description')->nullable();
             $table->datetime('due_date');
             $table->datetime('started_at')->nullable();

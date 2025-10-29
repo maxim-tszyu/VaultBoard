@@ -42,12 +42,8 @@ class GenerateEmbeddingJob implements ShouldQueue
             Log::info("Embedding generated for {$this->modelClass}#{$this->id}", [
                 'embedding_sample' => substr(json_encode($embedding), 0, 200) . '...',
             ]);
-            $clean = trim($embedding, " \n`");
-            $clean = preg_replace('/^json/', '', $clean);
-            $clean = trim($clean);
 
-            $result = json_decode($clean, true);
-            $model->saveEmbeddingContent($result);
+            $model->saveEmbeddingContent($embedding);
         } catch (Throwable $e) {
             Log::error('GenerateEmbeddingJob failed', [
                 'model' => $this->modelClass,

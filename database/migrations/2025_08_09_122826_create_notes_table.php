@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Task::class)->constrained()->cascadeOnDelete();
             $table->text('content')->nullable();
-            $table->vector('embedding', 64)->nullable();
+            $table->vector('embedding', 1024)->nullable();
             $table->timestamps();
         });
     }
