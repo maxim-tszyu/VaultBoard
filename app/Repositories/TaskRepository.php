@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Task;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Pgvector\Laravel\Distance;
 
 class TaskRepository
 {
@@ -25,5 +27,11 @@ class TaskRepository
         return Task::where('user_id', auth()->id())
             ->where('priority', 'High')
             ->get();
+    }
+
+    public static function findNearTasksBelongingToTask(Task $task): Collection
+    {
+        $neighbor = $task->nearestNeighbors('embedding', Distance::L2)->take(1)->get();
+        return $neighbor;
     }
 }

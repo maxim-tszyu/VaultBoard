@@ -32,6 +32,10 @@ class StoreTaskRequest extends FormRequest
                 'max:255',
                 Rule::unique('tasks', 'title')->where('user_id', $this->user()->id)->ignore($this->task?->id),
             ],
+            'description' => [
+                'required',
+                'max:255'
+            ],
             'priority' => [
                 'required',
                 new Enum(Priority::class),
@@ -42,7 +46,7 @@ class StoreTaskRequest extends FormRequest
                 'array',
             ],
             'category_ids.*' => [
-                Rule::exists('categories', 'id')->where(fn ($query) => $query->where('user_id', $this->user()->id)),
+                Rule::exists('categories', 'id')->where(fn($query) => $query->where('user_id', $this->user()->id)),
             ],
             'datetime' => [
                 'required',
@@ -52,7 +56,7 @@ class StoreTaskRequest extends FormRequest
             'parent_task_id' => [
                 'nullable',
                 Rule::exists('tasks', 'id')->where(
-                    fn ($query) => $query->where('user_id', $this->user()->id)->whereNot('id', $this->task?->id)
+                    fn($query) => $query->where('user_id', $this->user()->id)->whereNot('id', $this->task?->id)
                 ),
             ],
         ];

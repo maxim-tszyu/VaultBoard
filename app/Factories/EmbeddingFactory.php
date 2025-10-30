@@ -15,8 +15,8 @@ class EmbeddingFactory
     public static function make(EmbeddableContract $model): FormattableToEmbeddingContract
     {
         return match (get_class($model)) {
-            Task::class => new TaskFormatter(),
-            Note::class => new NoteFormatter(),
+            Task::class => app(TaskFormatter::class),
+            Note::class => app(NoteFormatter::class),
             default => throw new Exception("No formatter for model " . get_class($model))
         };
     }

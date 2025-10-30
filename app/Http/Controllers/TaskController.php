@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Jobs\GenerateAiReport;
 use App\Models\Category;
 use App\Models\Task;
+use App\Repositories\TaskRepository;
 use App\Services\TaskService;
 use Illuminate\Support\Facades\Cache;
 
@@ -79,6 +80,9 @@ class TaskController extends Controller
             Cache::put("ai_report_failed_at_{$task->id}", now(), now()->addHour());
             dispatch(new GenerateAiReport($task->id));
         }
+
+        $nearest_neighbor = TaskRepository::findNearTasksBelongingToTask($task);
+        $params['nearestNeighbor'] = $nearest_neighbor;
 
         return view('tasks.show', $params);
     }

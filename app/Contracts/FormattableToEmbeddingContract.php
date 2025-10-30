@@ -4,5 +4,7 @@ namespace App\Contracts;
 
 interface FormattableToEmbeddingContract
 {
-    public function format(EmbeddableContract $embeddable): string;
+    public function build(EmbeddableContract $embeddable, $depth = 0): array;
+
+    public function format(array $message): string;
 }

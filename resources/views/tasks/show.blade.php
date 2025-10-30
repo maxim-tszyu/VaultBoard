@@ -17,7 +17,7 @@
 		<div class="bg-white/10 text-white rounded-2xl shadow-md p-6">
 			<h1 class="text-3xl font-bold mb-4">{{ $task->title }}</h1>
 			<p class="text-gray-200 mb-4">{{ $task->description }}</p>
-			<p class="text-gray-200 mb-4">{{ $task->embedding ?? 'something' }}</p>
+			<p class="text-gray-200 mb-4">{{ $nearestNeighbor ?? 'none' }}</p>
 
 			<div class="flex flex-wrap gap-4 text-sm text-gray-300">
 				<span class="px-3 py-1 rounded-full font-medium {{ $statusClasses[$task->status] ?? 'bg-white/10 text-gray-800' }}">

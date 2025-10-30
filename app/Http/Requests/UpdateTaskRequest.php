@@ -33,6 +33,10 @@ class UpdateTaskRequest extends FormRequest
                 'max:255',
                 Rule::unique('tasks', 'title')->where('user_id', $this->user()->id)->ignore($this->task?->id),
             ],
+            'description' => [
+                'required',
+                'max:255'
+            ],
             'status' => [
                 'required',
                 new Enum(Status::class),
