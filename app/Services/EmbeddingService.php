@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Reducers\EmbeddingReducer;
 use Exception;
 use Illuminate\Support\Facades\Http;
 
@@ -16,7 +15,7 @@ class EmbeddingService
                 'Content-Type' => 'application/json',
             ])
             ->post('http://ollama:11434/v1/embeddings', [
-                'model' => 'llama3-chatqa',
+                'model' => 'bge-m3:latest',
                 'input' => $content,
             ]);
 
@@ -28,8 +27,9 @@ class EmbeddingService
             throw new Exception('Failed to generate embedding');
         }
 
-        $reduced_embedding = EmbeddingReducer::reduce_vector($embedding, 1024);
+        $norm = sqrt(array_reduce($embedding, fn($carry, $val) => $carry + $val ** 2, 0));
+        $normalized = array_map(fn($val) => $val / $norm, $embedding);
 
-        return $reduced_embedding;
+        return $normalized;
     }
 }

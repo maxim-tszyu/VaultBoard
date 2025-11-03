@@ -6,7 +6,6 @@ use App\Contracts\EmbeddableContract;
 use Database\Factories\TaskFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
 use Pgvector\Laravel\HasNeighbors;
 use Pgvector\Laravel\Vector;
 
@@ -67,12 +66,12 @@ class Task extends Model implements EmbeddableContract
 
     public function saveEmbeddingContent(array $embedding): void
     {
-        $this->embedding = $embedding;
+        if ($embedding instanceof \Pgvector\Laravel\Vector) {
+            $embedding = $embedding->toArray();
+        }
 
-        $model = $this;
+        $this->embedding = new \Pgvector\Laravel\Vector($embedding);
 
-        static::withoutEvents(function () use ($model) {
-            $model->save();
-        });
+        static::withoutEvents(fn() => $this->save());
     }
 }

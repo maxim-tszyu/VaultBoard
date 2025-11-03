@@ -2,39 +2,26 @@
 
 namespace App\Formatters;
 
-
 use App\Contracts\EmbeddableContract;
 use App\Contracts\FormattableToEmbeddingContract;
-use App\Services\LogReportPayloadService;
-use Throwable;
 
 class NoteFormatter implements FormattableToEmbeddingContract
 {
-    public function __construct(private LogReportPayloadService $logService)
+    public function build(EmbeddableContract $embeddable, $depth = 0): string
     {
-    }
+        $parts = [];
 
-    public function build(EmbeddableContract $embeddable, $depth = 0): array
-    {
-        return [
-            'content' => $embeddable->content,
-            'belongs_to' => $embeddable->task
-                ? $embeddable->task->title
-                : 'This note is not assigned to any task',
-        ];
-    }
+        if (!empty($embeddable->content)) {
+            $parts[] = $embeddable->content;
+        }
 
-    public function format($message): string
-    {
-        $result = '';
-        foreach ($message as $key => $value) {
-            try {
-                $result .= "**{$key}:** {$value}\n";
-            } catch (Throwable $th) {
-                dd($message);
+        if ($embeddable->task) {
+            $parts[] = "Task title: " . $embeddable->task->title;
+            if (!empty($embeddable->task->description)) {
+                $parts[] = "Task description: " . $embeddable->task->description;
             }
         }
 
-        return $result;
+        return implode('. ', $parts);
     }
 }

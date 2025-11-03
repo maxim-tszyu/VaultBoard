@@ -11,7 +11,7 @@ class EmbeddableObserver
     public function saved(EmbeddableContract $model): void
     {
         $formatter = EmbeddingFactory::make($model);
-        $formatted = $formatter->format($formatter->build($model));
+        $formatted = $formatter->build($model);
 
         dispatch(new GenerateEmbeddingJob(
             formatted: $formatted,

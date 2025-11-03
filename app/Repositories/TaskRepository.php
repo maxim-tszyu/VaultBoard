@@ -31,7 +31,7 @@ class TaskRepository
 
     public static function findNearTasksBelongingToTask(Task $task): Collection
     {
-        $neighbor = $task->nearestNeighbors('embedding', Distance::L2)->take(1)->get();
+        $neighbor = $task->nearestNeighbors('embedding', Distance::Cosine)->take(2)->get();
         return $neighbor;
     }
 }

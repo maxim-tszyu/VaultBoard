@@ -29,6 +29,7 @@ return new class extends Migration {
             $table->enum('priority', Priority::values());
             $table->timestamps();
         });
+        DB::statement('CREATE INDEX tasks_embedding_hnsw ON tasks USING hnsw (embedding vector_cosine_ops);');
     }
 
     /**

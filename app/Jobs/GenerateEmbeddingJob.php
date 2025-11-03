@@ -20,6 +20,8 @@ class GenerateEmbeddingJob implements ShouldQueue
         public string $modelClass,
         public int $id
     ) {
+        \Illuminate\Support\Facades\Log::info('Variable type: ' . gettype($formatted));
+        \Illuminate\Support\Facades\Log::info('Variable type: ' . gettype($modelClass));
     }
 
     public function handle(EmbeddingService $service): void

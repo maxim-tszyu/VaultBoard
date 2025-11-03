@@ -35,7 +35,6 @@ class UpdateTaskRequest extends FormRequest
             ],
             'description' => [
                 'required',
-                'max:255'
             ],
             'status' => [
                 'required',

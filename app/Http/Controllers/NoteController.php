@@ -13,11 +13,14 @@ class NoteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private NoteService $service) {}
+    public function __construct(private NoteService $service)
+    {
+    }
 
     public function index()
     {
-        //
+        $notes = $this->service->index();
+        return view('notes.index', $notes);
     }
 
     /**
