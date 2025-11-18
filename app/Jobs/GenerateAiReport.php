@@ -39,7 +39,7 @@ class GenerateAiReport implements ShouldQueue
         $apiKey = env('API_KEY');
         $prompt = file_get_contents(resource_path(env('PROMPT_PATH')));
 
-        $task_content = ($service->build($task));
+        $task_content = $service->build($task);
         $text = ($service->buildMessage($task_content));
         try {
             $response = Http::timeout(10)

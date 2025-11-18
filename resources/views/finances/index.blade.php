@@ -1,7 +1,6 @@
 <x-app-layout>
 	<div class="max-w-7xl mx-auto p-6 space-y-8">
 
-		<!-- ======= Переключатель целей ======= -->
 		<div class="flex items-center justify-between mb-4">
 			<h1 class="text-2xl font-bold text-white">Мои финансовые цели</h1>
 
@@ -16,7 +15,6 @@
 				У вас пока нет целей. Создайте первую, чтобы начать отслеживать прогресс 💡
 			</div>
 		@else
-			<!-- ======= Список целей (переключатель) ======= -->
 			<div class="flex gap-3 overflow-x-auto pb-2">
 				@foreach($goals as $goal)
 					<a href="{{ route('finances.index', ['goal' => $goal->id]) }}"
@@ -30,7 +28,7 @@
 				@endforeach
 			</div>
 
-			<!-- ======= Активная цель ======= -->
+
 			<div class="bg-white/10 rounded-2xl p-8 shadow-lg text-white relative mt-4">
 				<div class="flex justify-between items-start mb-6">
 					<div>
@@ -47,8 +45,7 @@
 					$progress = min(100, round(($activeGoal->current_amount ?? 0) / $activeGoal->amount * 100, 1));
 				@endphp
 
-						<!-- Прогресс -->
-				<div class="w-full bg-white/20 rounded-full h-3 mb-2">
+						<div class="w-full bg-white/20 rounded-full h-3 mb-2">
 					<div class="bg-green-400 h-3 rounded-full transition-all duration-500"
 						 style="width: {{ $progress }}%"></div>
 				</div>
@@ -58,19 +55,17 @@
 				</div>
 			</div>
 		@endif
-		<!-- ======= Нижний блок: финансы + форма + AI ======= -->
 		<div class="grid gap-6 mt-6" style="grid-template-columns: 20fr 10fr;">
 
-			<!-- Левая часть: История финансов -->
 			<section class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm flex flex-col">
 				<h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">История финансов</h2>
 
-				<div class="overflow-y-auto max-h-[400px] space-y-3">
+				<div class="overfow-y-auto max-h-[400px] space-y-3">
 					@forelse ($finances as $t)
 						<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
 							<div>
 								<p class="font-medium">{{ $t->title }}</p>
-								<p class="text-sm text-gray-500">{{ $t->description }}</p>
+								<p class="text-sm text-gray-500">{{ $t->content }}</p>
 							</div>
 							<span class="{{ $t->type === 'income' ? 'text-green-500' : 'text-red-500' }}">
 						{{ $t->amount }} ₸
@@ -111,12 +106,10 @@
 						</button>
 					</div>
 
-					<!-- Форма -->
 					<form action="{{ route('finances.store') }}" method="POST" class="space-y-3">
 						@csrf
 						<input type="hidden" name="type" :value="type">
 
-						<!-- Сумма -->
 						<div>
 							<label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Сумма</label>
 							<input type="number" name="amount" step="0.01"
@@ -126,7 +119,6 @@
 								   required>
 						</div>
 
-						<!-- Название -->
 						<div>
 							<label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Название</label>
 							<input type="text" name="title"
@@ -136,7 +128,6 @@
 								   required>
 						</div>
 
-						<!-- Описание -->
 						<div>
 							<label class="block text-xs font-medium text-gray-600 dark:text-gray-400">Описание</label>
 							<textarea name="description" rows="2"
@@ -146,7 +137,6 @@
 									  placeholder="Необязательно"></textarea>
 						</div>
 
-						<!-- Кнопка -->
 						<button type="submit"
 								:class="type === 'income'
 				? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
